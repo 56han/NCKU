@@ -1,0 +1,101 @@
+﻿@model IEnumerable<PicWeb.Models.PostViewModel>
+
+@{
+    ViewBag.Title = ViewBag.UserName + " 的所有作品";
+}
+
+<div class="container mt-4">
+    <h3 class="mb-4">關於 @ViewBag.UserName</h3>
+
+    @foreach (var item in Model)
+    {
+        <div class="card mb-4" id="post-@item.Id" style="max-width: 600px; margin: 0 auto;">
+            <!-- 頭部：用戶名稱和日期 -->
+            <div class="card-header bg-white d-flex justify-content-between align-items-center p-3">
+                <div class="d-flex align-items-center">
+                    <div class="user-avatar me-2">
+                        <i class="fas fa-user-circle fa-2x text-secondary"></i>
+                    </div>
+                    <div class="fw-bold">@item.MemName</div>
+                </div>
+                <div class="text-muted">@item.PostDate.ToString("yyyy-MM-dd")</div>
+            </div>
+
+            <!-- 貼文內容 -->
+            <div class="px-3 pt-3 pb-3">
+                <div class="text-muted small mb-2">
+                    使用 @item.CamName 拍攝
+                </div>
+                <p class="card-text">@item.Note</p>
+            </div>
+
+            <!-- 圖片 -->
+            <img src="@Url.Content("~/Images/" + item.Pic)" class="card-img-top" alt="作品圖片"
+                 style="object-fit: cover; max-height: 800px; border-radius: 0;">
+
+            <!-- 內容區 -->
+            <div class="card-body">
+                <!-- 互動按鈕 -->
+                <div class="d-flex gap-3 mb-2">
+                    <button class="btn btn-outline-primary like-btn @(item.IsLiked ? "liked" : "")"
+                            data-post-id="@item.Id">
+                        <i class="fas fa-heart"></i>
+                        <span class="like-count">@item.LikeNum</span>
+                    </button>
+                    <button class="btn btn-outline-secondary comment-btn"
+                            data-post-id="@item.Id">
+                        <i class="fas fa-comment"></i> 留言
+                    </button>
+                </div>
+
+                <!-- 留言區域 -->
+                <div class="comments-section d-none" id="comments-@item.Id">
+                    <div class="mb-3">
+                        <textarea class="form-control comment-input" rows="2"
+                                  placeholder="發表留言..."></textarea>
+                        <button class="btn btn-primary btn-sm mt-2 submit-comment">送出</button>
+                    </div>
+                    <div class="comments-list">
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            try {
+                console.log('JavaScript 開始執行');
+                const urlParams = new URLSearchParams(window.location.search);
+                const scrollToId = urlParams.get('scrollTo');
+                console.log('要滾動到的 ID:', scrollToId);
+
+                if (scrollToId) {
+                    // 給足夠的時間讓頁面完全載入
+                    setTimeout(function () {
+                        const elementId = 'post-' + scrollToId;
+                        const targetElement = document.getElementById(elementId);
+                        console.log('尋找元素:', elementId);
+                        console.log('找到元素:', targetElement);
+
+                        if (targetElement) {
+                            // 使用 jQuery 的動畫滾動
+                            $('html, body').animate({
+                                scrollTop: $(targetElement).offset().top - 100
+                            }, 300);
+                            console.log('執行滾動');
+                        } else {
+                            console.log('找不到目標元素');
+                        }
+                    }, 300);
+                } else {
+                    console.log('URL 中沒有 scrollTo 參數');
+                }
+            } catch (error) {
+                console.error('發生錯誤:', error);
+            }
+        });
+    </script>
+}

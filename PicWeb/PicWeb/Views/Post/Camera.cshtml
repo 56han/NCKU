@@ -1,0 +1,204 @@
+﻿@model IEnumerable<PicWeb.Models.PostViewModel>
+
+@{
+    ViewBag.Title = ViewBag.CurrentCamera;
+}
+
+<div class="container">
+
+    @foreach (var item in Model)
+    {
+        <div class="card mb-4" style="max-width: 600px; margin: 0 auto;">
+            <!-- 頭部：用戶名稱和日期 -->
+            <div class="card-header bg-white d-flex justify-content-between align-items-center p-3">
+                <div class="d-flex align-items-center">
+                    <div class="user-avatar me-2">
+                        <i class="fas fa-user-circle fa-2x text-secondary"></i>
+                    </div>
+                    <div class="fw-bold">@item.MemName</div>
+                </div>
+                <div class="text-muted">@item.PostDate.ToString("yyyy-MM-dd")</div>
+            </div>
+
+            <!-- 貼文內容 -->
+            <div class="px-3 pt-3 pb-3">
+                <div class="text-muted camera-info mb-2">
+                    使用 @item.CamName 拍攝
+                </div>
+                <p class="card-text">@item.Note</p>
+            </div>
+
+            <!-- 圖片 -->
+            <img src="@Url.Content("~/Images/" + item.Pic)" class="card-img-top" alt="作品圖片"
+                 style="object-fit: cover; max-height: 800px; border-radius: 0;">
+
+            <!-- 內容區 -->
+            <div class="card-body">
+
+                <!-- 互動按鈕 -->
+                <div class="d-flex gap-3 mb-2">
+                    <button class="btn btn-outline-secondary like-btn @(item.IsLiked ? "liked" : "")"
+                            data-post-id="@item.Id">
+                        <i class="fas fa-heart"></i>
+                        <span class="like-count">@item.LikeNum</span>
+                    </button>
+                    <button class="btn btn-outline-secondary comment-btn"
+                            data-post-id="@item.Id">
+                        <i class="fas fa-comment"></i> 留言
+                    </button>
+                </div>
+
+                <!-- 留言區域 -->
+                <div class="comments-section d-none" id="comments-@item.Id">
+                    <div class="mb-3">
+                        <textarea class="form-control comment-input" rows="2"
+                                  placeholder="發表留言..."></textarea>
+                        <button class="btn btn-primary btn-sm mt-2 submit-comment">送出</button>
+                    </div>
+                    <div class="comments-list"></div>
+                    <button class="btn btn-outline-secondary btn-sm mt-2 new-comment-btn">
+                        <i class="fas fa-plus"></i> 新增留言
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Styles {
+    <style>
+        .card {
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            border-bottom: 1px solid #efefef;
+        }
+
+        .btn-outline-primary, .btn-outline-secondary {
+            border-radius: 20px;
+            padding: 5px 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .camera-info {
+            font-size: 0.8rem;
+        }
+
+        .like-btn.liked {
+            color: #dc3545;
+            border-color: #dc3545;
+        }
+
+            .like-btn.liked i {
+                color: #dc3545;
+            }
+
+        .comments-section {
+            border-top: 1px solid #dee2e6;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .comment-item {
+            padding: 0.5rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        // 按讚功能
+        $('.like-btn').click(function() {
+            var btn = $(this);
+            var postId = btn.data('post-id');
+
+            $.post('@Url.Action("ToggleLike", "Interaction")', { postId: postId })
+                .done(function(response) {
+                    if (response.success) {
+                        btn.toggleClass('liked');
+                        btn.find('.like-count').text(response.likeCount);
+                    } else if (response.redirectUrl) {
+                        window.location.href = response.redirectUrl;
+                    }
+                });
+        });
+
+        // 顯示留言區域
+        $('.comment-btn').click(function() {
+            var postId = $(this).data('post-id');
+            var commentsSection = $('#comments-' + postId);
+            commentsSection.toggleClass('d-none');
+
+            if (!commentsSection.hasClass('d-none')) {
+                loadComments(postId);
+            }
+        });
+
+        $('.new-comment-btn').click(function () {
+            var section = $(this).closest('.comments-section');
+            section.find('.mb-3').show();
+            section.find('.comment-input').focus();
+        });
+
+        // 提交留言
+        $('.submit-comment').click(function() {
+            var section = $(this).closest('.comments-section');
+            var postId = section.attr('id').split('-')[1];
+            var inputArea = section.find('.comment-input');
+            var message = inputArea.val();
+
+            if (!message.trim()) return; // 如果沒有輸入內容就返回
+
+            $.post('@Url.Action("AddComment", "Interaction")', {
+                postId: postId,
+                message: message
+            })
+            .done(function(response) {
+                if (response.success) {
+                    loadComments(postId);
+                    // 清空並隱藏輸入區
+                    inputArea.val('');
+                    section.find('.mb-3').hide();
+                } else if (response.redirectUrl) {
+                    window.location.href = response.redirectUrl;
+                }
+            });
+        });
+
+        function loadComments(postId) {
+            $.get('@Url.Action("GetComments", "Interaction")', { postId: postId })
+                .done(function(comments) {
+                    var list = $('#comments-' + postId + ' .comments-list');
+                    list.empty();
+
+                    comments.forEach(function (comment) {
+                        list.append(`
+                            <div class="comment-item mb-2">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-user-circle text-secondary me-2"></i>
+                                    <strong>${comment.MemberName}</strong>
+                                    <small class="text-muted ms-2">
+                                        ${comment.Date}
+                                    </small>
+                                </div>
+                                <div class="ms-4">${comment.Message}</div>
+                            </div>
+                        `);
+                    });
+
+                    // 顯示留言列表
+                    list.show();
+                });
+        }
+    </script>
+}

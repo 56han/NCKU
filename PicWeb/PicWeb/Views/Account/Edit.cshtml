@@ -1,0 +1,42 @@
+﻿@model PicWeb.Models.Member
+
+@{
+    ViewBag.Title = "編輯個人資料";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">編輯個人資料</h4>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("Edit", "Account", FormMethod.Post))
+                    {
+                        @Html.HiddenFor(m => m.ID)
+                        @Html.HiddenFor(m => m.MemPassword) @* 保留密碼欄位 *@
+
+                        <div class="mb-3">
+                            <label class="form-label">用戶名稱</label>
+                            @Html.TextBoxFor(m => m.MemName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.MemName, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">個人簡介</label>
+                            @Html.TextAreaFor(m => m.MemIntro, new { @class = "form-control", rows = 3 })
+                            @Html.ValidationMessageFor(m => m.MemIntro, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="text-end">
+                            @* 取消按鈕直接連到個人頁面 *@
+                            <a href="@Url.Action("PersonProfile", "Account")" class="btn btn-secondary me-2">取消</a>
+                            <button type="submit" class="btn btn-primary">儲存</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

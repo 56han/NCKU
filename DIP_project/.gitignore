@@ -1,0 +1,32 @@
+# 忽略文件
+*.txt
+*.log
+*.csv
+*.json
+*.yaml
+*.yml
+*.docx
+
+# 忽略影像檔案
+*.png
+*.jpg
+*.jpeg
+*.bmp
+*.tiff
+
+# 忽略 MATLAB、HDF5 檔案
+*.mat
+*.h5
+
+# 忽略其他大檔案
+*.zip
+*.tar
+*.7z
+*.mp4
+*.avi
+
+*.pth
+*.pt
+*.wandb
+*.sh
+*.cache

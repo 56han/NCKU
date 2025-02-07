@@ -1,0 +1,80 @@
+﻿@model IEnumerable<PicWeb.Models.PostViewModel>
+
+@{
+    ViewBag.Title = "Dazz 作品分享";
+}
+
+<div class="container">
+    <!-- 網站介紹區 -->
+    <div class="text-center py-5">
+        <h1 class="display-4 mb-4">Dazz 攝影作品分享平台</h1>
+        <p class="lead text-muted mx-auto" style="max-width: 1000px;">
+            Dazz Cam 是最近在 Threads 上爆紅的相機 APP，Dazz Cam 的靈感來自 80 年代的復古膠片相機，並且提供了偏光、復古、毛刺效果等多種選擇。
+            因此，我們提供另一個平台專屬為 Dazz 用戶交流攝影作品！
+            目前已有 @ViewBag.PostCount 件作品，
+            涵蓋 @ViewBag.CameraCount 種不同的相機，歡迎您加入我們的攝影社群！
+        </p>
+        <p class="mt-4">
+            <a href="@Url.Action("AllPost", "Post")" class="btn btn-primary">瀏覽所有作品</a>
+            <a href="@Url.Action("Register", "Account")" class="btn btn-secondary ms-2">立即加入</a>
+        </p>
+    </div>
+
+    <!-- 圖片牆 -->
+    <div class="row g-3">
+        @foreach (var post in Model)
+        {
+            <div class="col-md-4 col-lg-3">
+                <a href="@Url.Action("AllPost", "Post")" class="text-decoration-none">
+                    <div class="card h-100">
+                        <div class="square-image-container">
+                            <img src="@Url.Content("~/Images/" + post.Pic)"
+                                 class="card-img-top"
+                                 alt="@post.Note">
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        /* 正方形容器 */
+        .square-image-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%; /* 創建正方形容器 */
+            overflow: hidden;
+        }
+
+            /* 圖片填充樣式 */
+            .square-image-container img {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                object-fit: cover; /* 裁切並填滿容器 */
+                top: 0;
+                left: 0;
+            }
+
+        .card {
+            transition: transform 0.2s;
+            border: none;
+            overflow: hidden;
+        }
+
+            .card:hover {
+                transform: translateY(-5px);
+            }
+
+            .card img {
+                transition: transform 0.3s;
+            }
+
+            .card:hover img {
+                transform: scale(1.05);
+            }
+    </style>
+}

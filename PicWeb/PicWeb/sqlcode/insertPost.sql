@@ -1,0 +1,3 @@
+﻿INSERT INTO Post (CamID, MemID, Note, Pic, LikeNum, PostDate) VALUES (1, 4, N'幫大家找到了！！！Jennie這組照片是用Dazz CPM35拍的', 'girlsoutfits_1.jpg', 0, '2024-12-16');
+INSERT INTO Post (CamID, MemID, Note, Pic, LikeNum, PostDate) VALUES (1, 5, N'快翻出你手機裡面的大海照丟進Dazz選擇 CPM35相機', 'food_diary_1.jpg', 0, '2024-2-20');
+INSERT INTO Post (CamID, MemID, Note, Pic, LikeNum, PostDate) VALUES (1, 6, N'真的好好看！', 'anting_1004_1.jpg', 0, '2024-2-21');

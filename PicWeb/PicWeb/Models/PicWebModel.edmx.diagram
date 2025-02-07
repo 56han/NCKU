@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="a9cd92a9ebc94196acf71f52a4b8a14f" Name="Diagram1">
+        <EntityTypeShape EntityType="PicWebDBModel.Camera" Width="1.5" PointX="3.75" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="PicWebDBModel.Comment" Width="1.5" PointX="3" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PicWebDBModel.LikeRecord" Width="1.5" PointX="3" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PicWebDBModel.Member" Width="1.5" PointX="0.75" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PicWebDBModel.Post" Width="1.5" PointX="6" PointY="4.25" IsExpanded="true" />
+        <AssociationConnector Association="PicWebDBModel.FK_Post_Camera" ManuallyRouted="false" />
+        <AssociationConnector Association="PicWebDBModel.FK_Comment_Member" ManuallyRouted="false" />
+        <AssociationConnector Association="PicWebDBModel.FK_Comment_Post" ManuallyRouted="false" />
+        <AssociationConnector Association="PicWebDBModel.FK_LikeRecord_Member" ManuallyRouted="false" />
+        <AssociationConnector Association="PicWebDBModel.FK_LikeRecord_Post" ManuallyRouted="false" />
+        <AssociationConnector Association="PicWebDBModel.FK_Post_Member" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

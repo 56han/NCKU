@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>535</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>10</y>
+      <width>341</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Image</string>
+    </property>
+    <widget class="QPushButton" name="pb_load_folder">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>321</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Load Folder</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_pre_image">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>70</y>
+       <width>151</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Pre</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_next_image">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>70</y>
+       <width>151</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Next</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_cuurrent_image">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>120</y>
+       <width>301</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Current Image : </string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>180</y>
+      <width>341</width>
+      <height>201</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Detection</string>
+    </property>
+    <widget class="QPushButton" name="pb_detection">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>321</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Detection</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_iou">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>80</y>
+       <width>301</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>IoU : </string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_accuracy">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>110</y>
+       <width>301</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Accuracy : </string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_precision">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>140</y>
+       <width>301</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Precision :</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_recall">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>170</y>
+       <width>301</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Recall : </string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>400</y>
+      <width>341</width>
+      <height>111</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Segment</string>
+    </property>
+    <widget class="QPushButton" name="pb_segmentation">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>321</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Segmentation</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_dice_coefficient">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>80</y>
+       <width>301</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Dice Coefficient : </string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
