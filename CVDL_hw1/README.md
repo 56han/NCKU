@@ -2,8 +2,6 @@
 
 This project is part of the Computer Vision and Deep Learning (CVDL) coursework. It consists of five main tasks: Camera Calibration, Augmented Reality, Stereo Disparity Map, SIFT, and Training a CIFAR10 Classifier using VGG19 with Batch Normalization. A PyQt5-based UI is used to present all tasks.
 
----
-
 ## 1. Camera Calibration  
 ### 1.1 Corner Detection  
 - Detect corners in the chessboard images.  
@@ -20,8 +18,6 @@ This project is part of the Computer Vision and Deep Learning (CVDL) coursework.
 ### 1.5 Show the Undistorted Result  
 - Use the computed parameters to undistort the images.
 
----
-
 ## 2. Augmented Reality  
 ### 2.1 Show Words on Board  
 - Calibrate 5 images to obtain intrinsic, distortion, and extrinsic parameters.  
@@ -33,16 +29,12 @@ This project is part of the Computer Vision and Deep Learning (CVDL) coursework.
 - Input the same word as in Q2.1.  
 - Use the provided library `alphabet_lib_vertical.txt` to render the word vertically.
 
----
-
 ## 3. Stereo Disparity Map  
 ### 3.1 Compute Stereo Disparity Map  
 - Generate a disparity map from left and right stereo images.  
 
 ### 3.2 Checking Disparity Value  
 - Click on a point in the left image to find the corresponding point in the right image.
-
----
 
 ## 4. SIFT (Scale-Invariant Feature Transform)  
 ### 4.1 Keypoints Detection  
@@ -52,8 +44,6 @@ This project is part of the Computer Vision and Deep Learning (CVDL) coursework.
 ### 4.2 Matched Keypoints  
 - Extract good matches using SIFT.  
 - Draw matched feature points between two images.
-
----
 
 ## 5. Training a CIFAR10 Classifier Using VGG19 with Batch Normalization  
 ### 5.1 Load CIFAR10 and Show Augmented Images  
@@ -76,13 +66,9 @@ This project is part of the Computer Vision and Deep Learning (CVDL) coursework.
 - Run inference using the model with the highest validation accuracy.  
 - Display predicted class distribution and label.
 
----
-
 ## UI Implementation  
 - A PyQt5-based UI integrates all five tasks.  
 - Users can interactively perform each task and visualize the results.
-
----
 
 ## Dependencies  
 - Python 3.6  
@@ -91,8 +77,6 @@ This project is part of the Computer Vision and Deep Learning (CVDL) coursework.
 - PyQt5  
 - PyTorch  
 
----
-
 ## How to Run 
 1. Install required dependencies
 
@@ -100,8 +84,6 @@ This project is part of the Computer Vision and Deep Learning (CVDL) coursework.
 ``` sh
 python controller.py
 ```
-
----
 
 ## Author
 Yi-Han Wan
