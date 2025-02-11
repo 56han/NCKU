@@ -24,7 +24,6 @@ import torch.utils.data as Data
 from torch.autograd import Variable
 
 
-
 class CustomVGG19(nn.Module):
     def __init__(self):
         super(CustomVGG19, self).__init__()
@@ -32,71 +31,6 @@ class CustomVGG19(nn.Module):
         pretrain_model.classifier = nn.Sequential()  # remove last layer
         self.features = pretrain_model
 
-        # self.features = nn.Sequential(
-        #     # 第一层
-        #     nn.Conv2d(3, 64, kernel_size=3, padding=1),
-        #     nn.BatchNorm2d(64),
-        #     nn.ReLU(inplace=True),
-        #     nn.Conv2d(64, 64, kernel_size=3, padding=1),
-        #     nn.BatchNorm2d(64),
-        #     nn.ReLU(inplace=True),
-        #     nn.MaxPool2d(kernel_size=2, stride=2),
-
-        #     # 第二层
-        #     nn.Conv2d(64, 128, kernel_size=3, padding=1),
-        #     nn.BatchNorm2d(128),
-        #     nn.ReLU(inplace=True),
-        #     nn.Conv2d(128, 128, kernel_size=3, padding=1),
-        #     nn.BatchNorm2d(128),
-        #     nn.ReLU(inplace=True),
-        #     nn.MaxPool2d(kernel_size=2, stride=2),
-
-        #     # 第三层
-        #     nn.Conv2d(128, 256, kernel_size=3, padding=1),
-        #     nn.BatchNorm2d(256),
-        #     nn.ReLU(inplace=True),
-        #     nn.Conv2d(256, 256, kernel_size=3, padding=1),
-        #     nn.BatchNorm2d(256),
-        #     nn.ReLU(inplace=True),
-        #     nn.Conv2d(256, 256, kernel_size=3, padding=1),
-        #     nn.BatchNorm2d(256),
-        #     nn.ReLU(inplace=True),
-        #     nn.Conv2d(256, 256, kernel_size=3, padding=1),
-        #     nn.BatchNorm2d(256),
-        #     nn.ReLU(inplace=True),
-        #     nn.MaxPool2d(kernel_size=2, stride=2),
-
-        #     # 第四层
-        #     nn.Conv2d(256, 512, kernel_size=3, padding=1),
-        #     nn.BatchNorm2d(512),
-        #     nn.ReLU(inplace=True),
-        #     nn.Conv2d(512, 512, kernel_size=3, padding=1),
-        #     nn.BatchNorm2d(512),
-        #     nn.ReLU(inplace=True),
-        #     nn.Conv2d(512, 512, kernel_size=3, padding=1),
-        #     nn.BatchNorm2d(512),
-        #     nn.ReLU(inplace=True),
-        #     nn.Conv2d(512, 512, kernel_size=3, padding=1),
-        #     nn.BatchNorm2d(512),
-        #     nn.ReLU(inplace=True),
-        #     nn.MaxPool2d(kernel_size=2, stride=2),
-
-        #     # 第五层
-        #     nn.Conv2d(512, 512, kernel_size=3, padding=1),
-        #     nn.BatchNorm2d(512),
-        #     nn.ReLU(inplace=True),
-        #     nn.Conv2d(512, 512, kernel_size=3, padding=1),
-        #     nn.BatchNorm2d(512),
-        #     nn.ReLU(inplace=True),
-        #     nn.Conv2d(512, 512, kernel_size=3, padding=1),
-        #     nn.BatchNorm2d(512),
-        #     nn.ReLU(inplace=True),
-        #     nn.Conv2d(512, 512, kernel_size=3, padding=1),
-        #     nn.BatchNorm2d(512),
-        #     nn.ReLU(inplace=True),
-        #     nn.MaxPool2d(kernel_size=2, stride=2)
-        # )
-        # self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
         self.classifier = nn.Sequential(
             nn.Linear(512 * 7 * 7, 4096),
             nn.ReLU(inplace=True),
@@ -106,15 +40,13 @@ class CustomVGG19(nn.Module):
             nn.Dropout(),
             nn.Linear(4096, 10)  # 10 classes for classification
         )
+
     def forward(self, x):
         x = self.features(x)
         # x = self.avgpool(x)
         # x = x.view(x.size(0), -1)
         x = self.classifier(x)
         return x
-
-
-
 
 class MainWindow_controller(QtWidgets.QMainWindow):
     def __init__(self,parent=None):
@@ -223,7 +155,6 @@ class MainWindow_controller(QtWidgets.QMainWindow):
     def Show_Word_on_Bound(self):
         self.get_input_text()
         try:
-            # print(self.input_text)
             hw1_main.Show_Word_on_Image(self.file_path,self.input_text,"onboard")
         except:
             QMessageBox.about(self, "檢查輸入", "Please Load folder first")
@@ -242,27 +173,15 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         disparity = stereo.compute(self.ImageL,self.ImageR)
 
         dis = disparity.astype(np.float64)
-        # disparity = cv2.normalize(dis, None, 0, 255, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_8U)
+        
         disparity = cv2.normalize(dis, None, 0, 255, norm_type=cv2.NORM_MINMAX)
-        # height,weight = disparity.shape[0],disparity.shape[1]
-        # print(height,weight)
-        # dis = cv2.resize(disparity, (1000, 680))
+        
         def draw_point(event):
-            # circle1 = plt.Circle((event.xdata,event.ydata), 10, color='green')
             d = disparity[int(event.ydata)][int(event.xdata)]
-            # d = d *255.0
             x = event.xdata - d
             y = event.ydata
-
             circle2 = plt.Circle((x, y), 15, color='lime')
-            # ax2.clear()
-            # ax1.add_patch(circle1)
-            # ax2.add_patch(circle2)            
-            # imgR = cv2.cvtColor(self.ImageR, cv2.COLOR_GRAY2RGB)
-            # ax2.imshow(imgR)
-            # figL.canvas.draw()
-            # figR.canvas.draw()
-            # Disparity = 0 時的判斷
+            
             if d!=0:
                 ax2.clear()
                 print('('+ str(int(x)) + ','+ str(int(y)) +')' +',dis: ' + str(d) + '\n')
@@ -368,10 +287,6 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         # List all files in the folder
         image_files = os.listdir(folder_path)
 
-        # Filter files with specific image extensions (e.g., '.jpg', '.png', etc.)
-        # image_extensions = ['.jpg', '.jpeg', '.png', '.bmp']
-        # image_files = [file for file in file_list if any(file.endswith(ext) for ext in image_extensions)]
-
         a1 = transforms.RandomHorizontalFlip(p=0.5) # p=0.5: 一半的圖片會被水平翻轉
         a2 = transforms.RandomVerticalFlip(p=0.5)
         a3 = transforms.RandomRotation(30)
@@ -412,15 +327,11 @@ class MainWindow_controller(QtWidgets.QMainWindow):
     #5.2    
     def Show_Model_Structure(self):
         # Create the VGG19 model with batch normalization
-        # vgg19_bn = models.vgg19_bn(num_classes=10)
         custom_vgg19 = CustomVGG19()
 
         # Check if a GPU is available and move the model and input data to it
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         custom_vgg19 = custom_vgg19.to(device)
-
-        # Create a random input tensor and move it to the same device
-        # input_data = torch.randn(1, 3, 224, 224).to(device)
 
         # Display the model structure using torchsummary.summary
         summary(custom_vgg19, (3, 32, 32))
@@ -449,7 +360,7 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         print("load image from", self.VGG_filename)
         pixmap = QPixmap(self.VGG_filename)
         scaledPixmap = pixmap.scaled(128, 128)
-        #图像缩放：使用label的setScaledContents(True)方法，自适应label大小
+        #Image scaling: Use the label's setScaledContents(True) method to adapt the label size
         self.ui.label_Q5_4_img.setScaledContents(True)
         print(scaledPixmap.height())
         print(scaledPixmap.width())
@@ -460,33 +371,26 @@ class MainWindow_controller(QtWidgets.QMainWindow):
                 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
         model = CustomVGG19()
         model = torch.load("./VGG19_cifar10.pth")
-        # custom_vgg19.load_state_dict(checkpoint)
         print("load model successfully")
 
         model.eval()  # Set the model to evaluation mode
         mean, std = [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]
         transform = transforms.Compose([
             transforms.ToTensor(),
-            torchvision.transforms.Normalize(mean=mean, std=std)
-            # transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)) 
+            torchvision.transforms.Normalize(mean=mean, std=std) 
         ])
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         img = transform(self.ImageVGG)
-        img = img.unsqueeze(0)  # Add a batch dimension # 放一張照片的時候 只需要一個維度
+        img = img.unsqueeze(0)  # Add a batch dimension
         img = img.to(device).detach()
         
         outputs = model(img)
         _, predicted = torch.max(outputs, 1)
 
         print('Predicted: ', classes[predicted.item()])
-         # Convert outputs to probabilities
         softmax = nn.Softmax(dim=1)
-        probabilities = softmax(outputs.cpu())    #probabilities[0] is the probability of each class
+        probabilities = softmax(outputs.cpu())   # probabilities[0] is the probability of each class
 
-        # print(f'Predicted Class: {class_label}')
-        # print(f'Predicted Probabilities:')
-        # for i, prob in enumerate(probabilities[0]):
-        #     print(f'{classes[i]}: {prob.item():.4f}')
 
         probs = probabilities[0].detach().numpy()
         plt.figure(figsize=(5, 5))
@@ -496,8 +400,6 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         plt.bar(classes, probs)
         plt.show()
         self.ui.label_Q5_predict.setText(f'Predicted: {classes[predicted.item()]}')
-
-
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

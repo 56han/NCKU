@@ -50,23 +50,6 @@ def find_chessboard(file_path, size=(11,8)):
         img_path = file_path + "/{}.bmp".format(i) # .format() 會填入{}
         cmr = myCamera(img_path, size)
 
-        # image = cv2.imread(img_path)
-        # objpoints = [] # 3d point in real world space
-        # imgpoints = [] # 2d points in image plane.
-        # criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001) # 停止優化的標準
-
-        # objp = np.zeros((11*8,3), np.float32) # 11 * 8 * 3
-        # objp[:,:2] = np.mgrid[0:11,0:8].T.reshape(-1,2)
-        # gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
-        # # Arrays to store object points and image points from all the images.
-        # ret, corners = cv2.findChessboardCorners(gray, size, None) # 使用函数的默认设置来执行角点检测
-    
-        # if ret == True: # 成功检测到了棋盘格
-        #     objpoints.append(objp)
-        #     #self.objpoints = np.array(self.objpoints)
-        #     corners2 = cv2.cornerSubPix(gray, corners,(5,5),(-1,-1), criteria)
-        #     imgpoints.append(corners2)
-
         cv2.drawChessboardCorners(cmr.image,patternSize=(size), corners=(cmr.imgpoints[0])  ,patternWasFound=(True)) 
         show_window_name = "1.1 find chessboard of image {}".format(i)
         #show = cv2.resize(cmr.image,(800,800))
@@ -88,7 +71,6 @@ def Find_The_Intrinsic_Matrix(file_path, size=(11,8)):
 
     for i in range(1,len(os.listdir(file_path))+1):
         img_path = file_path + "/{}.bmp".format(i)
-        # cmr = myCamera(img_path, size)
 
         image = cv2.imread(img_path)
 
@@ -144,9 +126,6 @@ def Find_The_Extrinsic_Matrix(file_path, select_image, size=(11,8)):
     print(Extrinsic_Matrix)
 
 def Find_The_Distortion_Matrix(file_path, size=(11,8)):
-    # for i in range(1,len(os.listdir(file_path))+1):
-    #     img_path = file_path + "/{}.bmp".format(i)
-    #     cmr = myCamera(img_path, size)
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001) # 停止優化的標準
 
     objp = np.zeros((8*11,3), np.float32) # 11 * 8 * 3
@@ -157,7 +136,6 @@ def Find_The_Distortion_Matrix(file_path, size=(11,8)):
 
     for i in range(1,len(os.listdir(file_path))+1):
         img_path = file_path + "/{}.bmp".format(i)
-        # cmr = myCamera(img_path, size)
 
         image = cv2.imread(img_path)
 
@@ -165,9 +143,8 @@ def Find_The_Distortion_Matrix(file_path, size=(11,8)):
         # Arrays to store object points and image points from all the images.
         ret, corners = cv2.findChessboardCorners(gray, size, None) # 使用函数的默认设置来执行角点检测
     
-        if ret == True: # 成功检测到了棋盘格
+        if ret == True: # 成功檢測到了棋盤格
             objpoints.append(objp)
-            #self.objpoints = np.array(self.objpoints)
             corners2 = cv2.cornerSubPix(gray, corners,(5,5),(-1,-1), criteria)
             imgpoints.append(corners2)
             
@@ -181,20 +158,16 @@ def Show_the_undistorted_result(file_path, size=(11,8)):
 
     for i in range(1,len(os.listdir(file_path))+1):
         img_path = file_path + "/{}.bmp".format(i)
-        # print('Show the undistorted result of Image{}'.format(i))
         cmr = myCamera(img_path, size)
-        h, w = cmr.image.shape[:2] # img.shape[:2] :取得彩色圖片的高、寬
+        h, w = cmr.image.shape[:2] 
         
-        # alpha=1:取原圖大小(不会进行任何裁剪) / alpha=0:删除图像的所有像素边缘，以确保去畸变后的图像不会出现黑边
         newCameraMatrix, roi = cv2.getOptimalNewCameraMatrix(cmr.intrinsic_matrix, cmr.dist, (w,h), 1, (w,h))
         
-        # Undistort 用于矫正由相机镜头引起的畸变
         dst = cv2.undistort(cmr.image, cmr.intrinsic_matrix, cmr.dist, None, newCameraMatrix)
-        # map_x, map_y  = cv2.initUndistortRectifyMap(cmr.intrinsic_matrix, cmr.dist, None, newCameraMatrix,cmr.frameSize,5)
-        # dst = cv2.remap(cmr.image, map_x, map_y, cv2.INTER_LINEAR)
+        
 
         x, y, w, h = roi
-        dst = dst[y:y+h, x:x+w] # 去除不需要的黑边，只保留有效的图像。
+        dst = dst[y:y+h, x:x+w] 
         Undistort = cv2.resize(dst,(2048,2048))
         distort = cmr.image
         merge = np.concatenate((distort,Undistort),axis=1)
@@ -207,7 +180,7 @@ def Show_the_undistorted_result(file_path, size=(11,8)):
         cv2.destroyAllWindows()
 
 def Show_Word_on_Image(file_path, text, type, size=(11,8)):
-    text = text.upper()  #讓英文字母變成大寫，因為只有大寫的資料
+    text = text.upper()  
     if type == "onboard":
         fs = cv2.FileStorage(file_path +'/Q2_lib/alphabet_lib_onboard.txt', cv2.FILE_STORAGE_READ)  #讀取對應的資料
     if type == "vertical":
@@ -232,19 +205,16 @@ def Show_Word_on_Image(file_path, text, type, size=(11,8)):
 
     for i in file_fit:
         img_path = file_path + "/" + i
-        # img_path = file_path + "/{}.bmp".format(i)  
-        # cmr = myCamera(img_path, size)
         x = [[7,5,0],[4,5,0],[1,5,0],[7,2,0],[4,2,0],[1,2,0]]  #字母顯示的位置
 
         image = cv2.imread(img_path)
 
         gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
         # Arrays to store object points and image points from all the images.
-        ret, corners = cv2.findChessboardCorners(gray, size, None) # 使用函数的默认设置来执行角点检测
+        ret, corners = cv2.findChessboardCorners(gray, size, None) 
     
-        if ret == True: # 成功检测到了棋盘格
+        if ret == True: 
             objpoints.append(objp)
-            #self.objpoints = np.array(self.objpoints)
             corners2 = cv2.cornerSubPix(gray, corners,(5,5),(-1,-1), criteria)
             imgpoints.append(corners2)
             
@@ -269,6 +239,3 @@ def draw(img, imgpts):
         for i in range(0,len(imgpts),2):
             img = cv2.line(img,tuple(imgpts[i].ravel()),tuple(imgpts[i+1].ravel()), (255,0,0), 5)
         return img
-
-
-
