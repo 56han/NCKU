@@ -56,7 +56,7 @@ This project is part of the Computer Vision and Deep Learning (CVDL) coursework.
 
 ### 5.3 Show Training/Validation Accuracy and Loss  
 - Dataset consists of 60,000 32x32 color images in 10 classes:  
-  - `airplane, automobile, bird, cat, deer, dog, frog, horse, ship, truck`  
+  - airplane, automobile, bird, cat, deer, dog, frog, horse, ship, truck
 - Training set: 50,000 images  
 - Validation set: 10,000 images  
 - Testing set: 10 images (generated from validation set)
@@ -71,19 +71,23 @@ This project is part of the Computer Vision and Deep Learning (CVDL) coursework.
 - Users can interactively perform each task and visualize the results.
 
 ## Dependencies  
-- Python 3.6  
+- Python 3.8 
 - OpenCV  
-- NumPy  
+- Matplotlib  
 - PyQt5  
 - PyTorch  
+- Torchvision
+- Torchsummary
+- Tensorboard
+- Pillow 
 
 ## How to Run 
 1. Install required dependencies
 
 2. Run the PyQt5 UI
-``` sh
-python controller.py
-```
+    ``` sh
+    python controller.py
+    ```
 
 ## Author
 Yi-Han Wan
