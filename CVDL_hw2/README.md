@@ -11,15 +11,10 @@ This project is part of the Computer Vision and Deep Learning (CVDL) coursework.
 
 ### Steps:  
 1. Load the video using File Dialog.  
-2. Create a background subtractor using:  
-    ```python
-    cv2.createBackgroundSubtractorKNN(history, dist2Threshold, detectShadows=True)
-    ```
+2. Create a background subtractor using: `cv2.createBackgroundSubtractorKNN(history, dist2Threshold, detectShadows=True)`
+ 
 3. For each frame in the video:
-    - Apply Gaussian blur:
-        ```python
-        cv2.GaussianBlur(frame, (5, 5), 0)
-        ```
+    - Apply Gaussian blur: `cv2.GaussianBlur(frame, (5, 5), 0)`
     - Get background mask using `subtractor.apply()`.
     - Extract moving objects using `cv2.bitwise_and()`.
 
@@ -54,10 +49,7 @@ This project is part of the Computer Vision and Deep Learning (CVDL) coursework.
 
 ## 4. Training a MNIST Classifier Using VGG19 with BN
 ### 4.1 Load Model and Show Model Structure
-- Click button `1. Show Model Structure` to display the VGG19 with Batch Normalization (BN) model using:
-    ```python
-    torchsummary.summary()
-    ```
+- Click button `1. Show Model Structure` to display the VGG19 with Batch Normalization (BN) model using: `torchsummary.summary()`
 
 ### 4.2 Show Training/Validation Accuracy and Loss
 - Train the model for at least 30 epochs.
