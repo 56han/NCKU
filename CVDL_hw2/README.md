@@ -16,12 +16,12 @@ This project is part of the Computer Vision and Deep Learning (CVDL) coursework.
     cv2.createBackgroundSubtractorKNN(history, dist2Threshold, detectShadows=True)
     ```
 3. For each frame in the video:
-- Apply Gaussian blur:
-    ```python
-    cv2.GaussianBlur(frame, (5, 5), 0)
-    ```
-- Get background mask using `subtractor.apply()`.
-- Extract moving objects using `cv2.bitwise_and()`.
+    - Apply Gaussian blur:
+        ```python
+        cv2.GaussianBlur(frame, (5, 5), 0)
+        ```
+    - Get background mask using `subtractor.apply()`.
+    - Extract moving objects using `cv2.bitwise_and()`.
 
 ## 2. Optical Flow
 ### Given: 
@@ -41,8 +41,8 @@ This project is part of the Computer Vision and Deep Learning (CVDL) coursework.
 - RGB image: `logo.jpg`
 
 ### Task:
-Use Principal Component Analysis (PCA) for dimension reduction.
-Find the minimum number of components `n` that keeps the reconstruction error ≤ 3.0.
+- Use Principal Component Analysis (PCA) for dimension reduction.
+- Find the minimum number of components `n` that keeps the reconstruction error ≤ 3.0.
 
 ### Steps:
 1. Convert RGB image to grayscale.
