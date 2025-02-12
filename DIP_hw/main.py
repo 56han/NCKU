@@ -25,8 +25,7 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         self.ui.LowerpassBtn.clicked.connect(self.ft_gaussian)
 
     def load_image(self):
-        filename, filetype = QFileDialog.getOpenFileName(self,"Open file","./")                 # start path
-        # self.ImageR = cv2.imread(filename,0) 
+        filename, filetype = QFileDialog.getOpenFileName(self,"Open file","./")                 # start path 
         print("load image right from", filename)
         self.image = Image.open(filename)
         pixmap = QPixmap(filename)
@@ -40,14 +39,7 @@ class MainWindow_controller(QtWidgets.QMainWindow):
     def Fourier_Transform_noise(self):
         f = np.fft.fft2(self.image)
         fshift = np.fft.fftshift(f)
-        # 构建振幅谱
         magnitude_spectrum = 20*np.log(np.abs(fshift))
-
-        # 显示频率域图像
-        # plt.imshow(magnitude_spectrum, cmap='gray')
-        # plt.title('Frequency Domain Image')
-        # plt.xticks([]), plt.yticks([])  # 隐藏坐标轴
-        # plt.show()
 
         # 生成圓形遮罩
         rows, cols = self.image.size
@@ -64,11 +56,6 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         fshift_filtered = fshift * mask
 
         spectrum = 20*np.log(np.abs(fshift_filtered)+1)
-        # 显示频率域图像
-        # plt.imshow(spectrum, cmap='gray')
-        # plt.title('Frequency Domain Image')
-        # plt.xticks([]), plt.yticks([])  # 隐藏坐标轴
-        # plt.show()
 
         img_back = np.fft.ifft2(np.fft.ifftshift(fshift_filtered))
         img_back = np.abs(img_back)
@@ -86,14 +73,7 @@ class MainWindow_controller(QtWidgets.QMainWindow):
     def Fourier_Transform_sharp(self):
         f = np.fft.fft2(self.image)
         fshift = np.fft.fftshift(f)
-        # 构建振幅谱
         magnitude_spectrum = 20*np.log(np.abs(fshift))
-
-        # 显示频率域图像
-        # plt.imshow(magnitude_spectrum, cmap='gray')
-        # plt.title('Frequency Domain Image')
-        # plt.xticks([]), plt.yticks([])  # 隐藏坐标轴
-        # plt.show()
 
         # 生成圓形遮罩
         rows, cols = self.image.size
@@ -110,11 +90,6 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         fshift_filtered = fshift * mask
 
         spectrum = 20*np.log(np.abs(fshift_filtered)+1)
-        # 显示频率域图像
-        # plt.imshow(spectrum, cmap='gray')
-        # plt.title('Frequency Domain Image')
-        # plt.xticks([]), plt.yticks([])  # 隐藏坐标轴
-        # plt.show()
 
         # 逆傅立葉變換回空間域
         img_back = np.fft.ifft2(np.fft.ifftshift(fshift_filtered))
@@ -143,8 +118,6 @@ class MainWindow_controller(QtWidgets.QMainWindow):
 
         avg_image = Image.fromarray(smooth_image_arr.astype(np.uint8))
 
-        # Show and save the resulting images
-        # sharp_image.show()
         avg_image.save('1_avg_filtered_image.jpg')
         pixmap = QPixmap('1_avg_filtered_image.jpg')
         avg_Image = pixmap.scaled(256, 256)
@@ -152,15 +125,9 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         self.ui.Image_RU.setPixmap(avg_Image)
         self.ui.ImageLabel_RU.setText('1(a) Average filter')
 
-        #--------------------------------------------------------------------------------------------------
-        # Apply the median filter
-        # median_filtered_img = Image.fromarray(self.img_array.copy())
-        # median_filtered_img = median_filtered_img.filter(ImageFilter.MedianFilter(size=3))  # Change the size as needed
-        
         medianBlur = cv2.medianBlur(self.img_array, 5)
         median_filtered_img = Image.fromarray(medianBlur.astype(np.uint8))
 
-        # median_filtered_img.show()
         median_filtered_img.save('1_median_filtered_image.jpg')
         pixmap = QPixmap('1_median_filtered_image.jpg')
         avg_Image = pixmap.scaled(256, 256)
@@ -173,12 +140,7 @@ class MainWindow_controller(QtWidgets.QMainWindow):
     def sharp(self): #2
         sobelx = cv2.Sobel(self.img_array, cv2.CV_64F, 1, 0, ksize=3)
         sobely = cv2.Sobel(self.img_array, cv2.CV_64F, 0, 1, ksize=3)
-        # sobel_combined = cv2.magnitude(sobelx, sobely).astype('uint8')  # 綜合 Sobel 邊緣檢測結果
         sobel_combined = cv2.magnitude(sobelx, sobely)  # 綜合 Sobel 邊緣檢測結果
-
-        # sobel_combined = cv2.imshow("sobel_combined",sobel_combined)
-        # cv2.waitKey(0)
-        # cv2.destroyAllWindows()
 
         # 將 Sobel 圖像轉為 8 位元
         sobel_combined = np.uint8(sobel_combined)
@@ -187,7 +149,6 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         sobel_combined_image = cv2.addWeighted(self.img_array, 1, sobel_combined, 0.3, 0.0)
 
         # Show and save the resulting images
-        # sharp_image.show()
         sobel_image = Image.fromarray(sobel_combined_image.astype(np.uint8))
 
         sobel_image.save('2_sharp_image.jpg')
@@ -226,8 +187,6 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         # Apply Fourier transform to the image
         f = np.fft.fft2(self.image)
         fshift = np.fft.fftshift(f)
-        # 构建振幅谱
-        # magnitude_spectrum = 20*np.log(np.abs(fshift))
 
         # Create a Gaussian filter in the frequency domain
         rows, cols = self.image.size
