@@ -9,14 +9,16 @@
 - [memchr.c](#memchrc)
   - [實驗設計](#實驗設計)
   - [分析結果](#分析結果)
-  - [x86 vs memchr_opt](#x86-最佳化實作策略)
+  - [x86 vs memchr_opt](#x86-vs-memchr_opt)
 
 ---
 
 ## div64.c
 
 ### **實驗目的**
-探討 `do_div()` 巨集在不同除數情境下的表現，評估其效能與限制。
+- 在 Linux 核心原始程式碼找到 `div64.c` 相關的程式碼（`do_div()`）
+    - Linux 核心原始程式碼：[include/asm-generic/div64.h](https://github.com/torvalds/linux/blob/master/include/asm-generic/div64.h)
+- 探討 `do_div()` 巨集在不同除數情境下的表現，評估其效能與限制。
 
 ### **實驗步驟**
 #### **步驟 1：撰寫測試模組**
@@ -81,7 +83,8 @@ Length: 10485760, Position: 10485759, memchr: 0.000000, memchr_opt: 0.003597
 
 ---
 
-## x86 最佳化 vs `memchr_opt`
+## x86 vs `memchr_opt`
+Linux 核心原始程式碼找出 x86 對應的最佳化實作：[arch/x86/lib/string_32.c](https://github.com/torvalds/linux/blob/master/arch/x86/lib/string_32.c)
 
 ### **x86 最佳化策略**
 - **利用 x86 指令集**：`repne scasb` 進行快速字節掃描。
