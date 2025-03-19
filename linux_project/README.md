@@ -16,7 +16,7 @@
 ## div64.c
 
 ### **實驗目的**
-- 在 Linux 核心原始程式碼找到 `div64.c` 相關的程式碼（`do_div()`）
+- 在 Linux 核心原始程式碼找到 `div64.c` 相關的程式碼（`do_div()`）。
     - Linux 核心原始程式碼：[include/asm-generic/div64.h](https://github.com/torvalds/linux/blob/master/include/asm-generic/div64.h)
 - 探討 `do_div()` 巨集在不同除數情境下的表現，評估其效能與限制。
 
@@ -50,7 +50,7 @@ sudo dmesg | grep "do_div test"
 ### **實驗結果分析**
 #### **常數除數 vs 變數除數**
 - **常數除數**：
-  - `2^n` 的除數可用 **右移** (`>>`) 取代除法，提高效率。
+  - 2<sup>n</sup> 的除數可用 **右移** 取代除法，提高效率。
   - 編譯期可進行優化，減少運行時計算負擔。
 - **變數除數**：
   - **無法進行位運算優化**，需完整執行 64-bit 除法。
@@ -70,14 +70,35 @@ sudo dmesg | grep "do_div test"
 
 ### **分析結果**
 ```shell
+Length: 1024, Position: 0, memchr: 0.000000, memchr_opt: 0.000000
+Length: 1024, Position: 512, memchr: 0.000000, memchr_opt: 0.000000
+Length: 1024, Position: 1023, memchr: 0.000000, memchr_opt: 0.000000
+Length: 1024, Position: 1025, memchr: 0.000000, memchr_opt: 0.000000
+
+Length: 10240, Position: 0, memchr: 0.000000, memchr_opt: 0.000000
+Length: 10240, Position: 5120, memchr: 0.000000, memchr_opt: 0.000001
 Length: 10240, Position: 10239, memchr: 0.000000, memchr_opt: 0.000002
+Length: 10240, Position: 10241, memchr: 0.000000, memchr_opt: 0.000002
+
+Length: 102400, Position: 0, memchr: 0.000000, memchr_opt: 0.000000
+Length: 102400, Position: 51200, memchr: 0.000000, memchr_opt: 0.000016
+Length: 102400, Position: 102399, memchr: 0.000000, memchr_opt: 0.000027
+Length: 102400, Position: 102401, memchr: 0.000000, memchr_opt: 0.000049
+
+Length: 1048576, Position: 0, memchr: 0.000000, memchr_opt: 0.000000
+Length: 1048576, Position: 524288, memchr: 0.000000, memchr_opt: 0.000124
 Length: 1048576, Position: 1048575, memchr: 0.000000, memchr_opt: 0.000277
+Length: 1048576, Position: 1048577, memchr: 0.000000, memchr_opt: 0.000242
+
+Length: 10485760, Position: 0, memchr: 0.000000, memchr_opt: 0.000000
+Length: 10485760, Position: 5242880, memchr: 0.000000, memchr_opt: 0.001668
 Length: 10485760, Position: 10485759, memchr: 0.000000, memchr_opt: 0.003597
+Length: 10485760, Position: 10485761, memchr: 0.000000, memchr_opt: 0.002807
 ```
 
 #### **影響效能的因素**
-- **函數呼叫開銷**：`memchr_opt` 有額外的對齊檢查，影響小數據量效能。
-- **對齊檢查**：小資料塊時，對齊優化的開銷可能超過潛在收益。
+- **函數呼叫開銷**：`memchr_opt` 有額外的對齊檢查，影響小資料量效能。
+- **對齊檢查**：小資料塊時，對齊、優化的開銷可能超過潛在收益。
 - **分支預測失敗**：`memchr_opt` 含多個條件分支，影響 CPU 預測效能。
 - **記憶體存取模式**：大資料塊時 `memchr_opt` 才能展現優勢。
 
@@ -102,8 +123,6 @@ Linux 核心原始程式碼找出 x86 對應的最佳化實作：[arch/x86/lib/s
 |----------|----------------|----------------|
 | x86 `repne scasb` | 高度優化、指令級別優化 | 受限於 x86 架構 |
 | `memchr_opt` | 跨平台適用、適合大資料塊 | 小資料塊效能較低 |
-
-這份研究探討了 Linux Kernel `do_div()` 和 `memchr()` 在不同情境下的效能，未來可進一步測試更多 CPU 架構如 ARM 來分析其影響。
 
 ---
 
